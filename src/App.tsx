@@ -1,10 +1,11 @@
 import './App.css'
+import CustomRoutes from './routes/CustomRoutes'
 
 function App() {
 
   return (
     <>
-     <div>Hello world</div>
+     <CustomRoutes/>
     </>
   )
 }
