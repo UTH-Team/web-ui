@@ -11,7 +11,7 @@ const PublicRoute: RouteType[] = [
     page: HomePage,
     children: [
       {
-        path: "tab1",
+        path: "",
         page: Tab1,
         layout:NoneLayout
       },
