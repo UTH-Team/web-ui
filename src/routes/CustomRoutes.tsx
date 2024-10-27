@@ -4,6 +4,7 @@ import { PublicRoute } from ".";
 import NotFoundPage from "../pages/NotFoundPage";
 import DefaultLayout from "../layouts/DefaultLayout";
 import { RouteType } from "../types/RouteType";
+import Auth from '../pages/Auth/Auth'; // Import the Auth component
 
 const CustomRoutes: React.FC = () => {
   const renderRoutes = (routes: RouteType[]) =>
@@ -37,6 +38,8 @@ const CustomRoutes: React.FC = () => {
           </DefaultLayout>
         }
       />
+      <Route path="/auth" element={<Auth />} />
+
     </Routes>
   );
 };
