@@ -4,6 +4,7 @@ import Tab1 from "../components/Tab1";
 import Tab2 from "../components/Tab2";
 import NoneLayout from "../layouts/NoneLayout";
 import { RouteType } from "../types/RouteType";
+import AuctionPage from "../pages/AuctionPage";
 
 const PublicRoute: RouteType[] = [
   {
@@ -26,6 +27,10 @@ const PublicRoute: RouteType[] = [
     path: "/about",
     page: AboutPage,
   },
+  {
+    path: "/auction",
+    page: AuctionPage,
+  }
 ];
 
 const PrivateRoute : any[] = [

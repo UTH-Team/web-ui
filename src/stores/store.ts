@@ -1,18 +1,20 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { productApi } from "../services/product.service";
+import { auctionApi } from "../services/auction.service"; // Import auctionApi
 import productReducer from "./slices/product.slice";
 
 export const store = configureStore({
-    reducer : {
+    reducer: {
         product: productReducer,
         [productApi.reducerPath]: productApi.reducer,
+        [auctionApi.reducerPath]: auctionApi.reducer, // Add auctionApi reducer
     },
-    // Add middleware for API features like caching, invalidation, polling
     middleware(getDefaultMiddleware) {
-        return getDefaultMiddleware().concat(productApi.middleware); // Add  middleware
+        return getDefaultMiddleware()
+            .concat(productApi.middleware)
+            .concat(auctionApi.middleware); // Add auctionApi middleware
     },
-})
+});
 
-
-setupListeners(store.dispatch )
+setupListeners(store.dispatch);
