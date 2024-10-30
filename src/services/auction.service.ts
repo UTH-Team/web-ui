@@ -1,16 +1,19 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { Auction } from '../types/AuctionType'; // Import your Auction type
+import { RootState } from '@reduxjs/toolkit/query/react';
+
+const auctionUrl = import.meta.env.VITE_AUCTION_BASE_URL
 
 
 export const auctionApi = createApi({
     reducerPath: 'auctionApi', // Unique identifier for this API slice
-    baseQuery: fetchBaseQuery({ baseUrl: '/api' }), // Your API base URL
+    baseQuery: fetchBaseQuery({ baseUrl: auctionUrl }), // Your API base URL
     tagTypes: ['Auction'], // Define tag types for invalidation
     endpoints: (builder) => ({
 
 
         getAuctions: builder.query<Auction[], void>({
-            query: () => '/auctions',
+            query: () => '/all',
             providesTags: ['Auction'], // Provides the 'Auction' tag
         }),
 
