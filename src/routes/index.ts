@@ -5,6 +5,8 @@ import Tab2 from "../components/Tab2";
 import NoneLayout from "../layouts/NoneLayout";
 import { RouteType } from "../types/RouteType";
 import AuctionPage from "../pages/AuctionPage";
+import ProductDetailPage from "../pages/ProductDetailPage";
+import Auth from "../pages/Auth/Auth";
 
 const PublicRoute: RouteType[] = [
   {
@@ -17,7 +19,7 @@ const PublicRoute: RouteType[] = [
         layout:NoneLayout
       },
       {
-        path: "tab2",
+        path: "cart",
         page: Tab2,
         layout:NoneLayout
       },
@@ -30,6 +32,15 @@ const PublicRoute: RouteType[] = [
   {
     path: "/auction",
     page: AuctionPage,
+  },
+  {
+    path: "/auth",
+    page: Auth,
+    layout :NoneLayout
+  },
+  {
+    path: "/product/:id",
+    page: ProductDetailPage,
   }
 ];
 

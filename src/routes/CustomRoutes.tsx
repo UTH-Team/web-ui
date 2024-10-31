@@ -38,7 +38,6 @@ const CustomRoutes: React.FC = () => {
           </DefaultLayout>
         }
       />
-      <Route path="/auth" element={<Auth />} />
 
     </Routes>
   );

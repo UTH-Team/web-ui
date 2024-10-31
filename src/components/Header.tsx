@@ -127,9 +127,19 @@ function Header() {
         {isLoggedIn ? (
           <>
             {/* Nút giỏ hàng */}
+            <Button
+          color="inherit"
+          component={Link}
+          to="/cart"
+          sx={{
+            fontWeight: activeTab === "about" ? "bold" : "normal",
+            color: activeTab === "about" ? "primary.main" : "inherit",
+          }}
+        >
             <IconButton color="inherit">
               <ShoppingCartIcon />
             </IconButton>
+        </Button>
 
             {/* Avatar và tên người dùng */}
             <IconButton color="inherit" onClick={handleMenuOpen}>
@@ -168,7 +178,7 @@ function Header() {
           <Button
             color="inherit"
             component={Link}
-            to="/login"
+            to="/auth"
             sx={{
               fontWeight: activeTab === "login" ? "bold" : "normal",
               color: activeTab === "login" ? "primary.main" : "inherit",
