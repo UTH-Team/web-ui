@@ -7,53 +7,65 @@ const auctionUrl = import.meta.env.VITE_AUCTION_BASE_URL
 
 export const auctionApi = createApi({
     reducerPath: 'auctionApi', // Unique identifier for this API slice
-    baseQuery: fetchBaseQuery({ baseUrl: auctionUrl }), // Your API base URL
-    tagTypes: ['Auction'], // Define tag types for invalidation
-    endpoints: (builder) => ({
+    baseQuery: fetchBaseQuery({ 
+        baseUrl: auctionUrl ,
+        prepareHeaders: (headers) => {
+        // Lấy token từ Redux state hoặc từ localStorage 
+        const token = localStorage.getItem('token'); 
+        // Nếu có token, thêm nó vào header
+        if (token) {
+            headers.set('Authorization', `Bearer ${token}`);
+        }
+
+        return headers;
+    },
+}), // Your API base URL
+    // tagTypes: ['Auction'], // Define tag types for invalidation
+    endpoints: (build) => ({
 
 
-        getAuctions: builder.query<Auction[], void>({
+        getAuctions: build.query<Auction[], void>({
             query: () => '/all',
-            providesTags: ['Auction'], // Provides the 'Auction' tag
+            // providesTags: ['Auction'], // Provides the 'Auction' tag
         }),
 
-        getAuction: builder.query<Auction, string>({
+        getAuction: build.query<Auction, string>({
 
             query: (id) => `/auctions/${id}`,
-            providesTags: (result, error, id) => [{ type: 'Auction', id }], // Provides a tag for the specific auction
+            // providesTags: (result, error, id) => [{ type: 'Auction', id }], // Provides a tag for the specific auction
         }),
 
 
-        placeBid: builder.mutation<Auction, { auctionId: string; bidAmount: number; userId: string }>({
+        placeBid: build.mutation<Auction, { auctionId: string; bidAmount: number; userId: string }>({
 
             query: ({ auctionId, bidAmount, userId }) => ({
                 url: `/auctions/${auctionId}/bid?bidAmount=${bidAmount}&userId=${userId}`,
                 method: 'PUT',
 
             }),
-            invalidatesTags: (result, error, { auctionId }) => [{ type: 'Auction', id: auctionId }], // Invalidates the specific auction tag
+        //   /  invalidatesTags: (result, error, { auctionId }) => [{ type: 'Auction', id: auctionId }], // Invalidates the specific auction tag
 
 
         }),
-        quickBuy: builder.mutation<void, { auctionId: string; userId: string }>({
+        quickBuy: build.mutation<void, { auctionId: string; userId: string }>({
 
             query: ({ auctionId, userId }) => ({
                 url: `/auctions/${auctionId}/quick-buy?userId=${userId}`,
                 method: 'PUT',
             }),
-            invalidatesTags: (result, error, { auctionId }) => [{ type: 'Auction', id: auctionId }],
+            // invalidatesTags: (result, error, { auctionId }) => [{ type: 'Auction', id: auctionId }],
         }),
 
 
 
 
-        createAuction: builder.mutation<Auction, Partial<Auction>>({
+        createAuction: build.mutation<Auction, Partial<Auction>>({
             query: (auctionData) => ({
                 url: '/auctions',
                 method: 'POST',
                 body: auctionData
             }),
-            invalidatesTags: ['Auction'] // Invalidates the 'Auction' tag to trigger re-fetch
+            // invalidatesTags: ['Auction'] // Invalidates the 'Auction' tag to trigger re-fetch
 
         })
 

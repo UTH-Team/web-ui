@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 
 const AuctionList: React.FC = () => {
+
     const { data: auctions, isLoading, isError } = useGetAuctionsQuery();
 
     if (isLoading) {
@@ -20,7 +21,7 @@ const AuctionList: React.FC = () => {
       )
 
     }
-
+    console.log(auctions);
 
     if (isError) return <p>Error loading auctions.</p>;
 
