@@ -1,42 +1,43 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Button, Pagination, Grid, Card, CardContent, CardMedia, Tooltip, Grid2 } from '@mui/material';
+import { Box, Typography, Button, Pagination, Grid, Card, CardContent, CardMedia, Tooltip, CircularProgress } from '@mui/material';
 import Carousel from 'react-material-ui-carousel';
-
-interface Product {
-  id: number;
-  name: string;
-  image: string;
-  description: string;
-}
+import { useGetAllProductQuery } from '../services/product.service';
+import { ProductData } from '../types/ProductType';
 
 const categories: string[] = ['Category 1', 'Category 2', 'Category 3'];
-const products: Product[] = Array.from({ length: 20 }, (_, index) => ({
-  id: index + 1,
-  name: `Product ${index + 1}`,
-  image: `https://via.placeholder.com/150`,
-  description: `Detailed description for Product ${index + 1}. This product is of great quality and highly recommended for use.`,
-}));
-const topSearchProducts: Product[] = products.slice(0, 5);
-const todaySuggestions: Product[] = products.slice(5, 10);
 
 const Tab1: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 5;
   const navigate = useNavigate();
+  const { data, error, isLoading } = useGetAllProductQuery();
 
   const handlePageChange = (_: React.ChangeEvent<unknown>, page: number) => {
     setCurrentPage(page);
   };
 
-  const paginatedProducts = products.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
   const handleProductClick = (id: number) => {
     navigate(`/product/${id}`);
   };
+
+  // Xử lý phân trang
+  const paginatedProducts = data?.data.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  ) || [];
+
+  if (isLoading) {
+    return (
+      <Box display="flex" justifyContent="center" mt={3}>
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return <Typography color="error">Failed to load products</Typography>;
+  }
 
   return (
     <Box p={3}>
@@ -60,20 +61,21 @@ const Tab1: React.FC = () => {
 
       {/* Top Search Products */}
       <Box mt={3}>
-        <Typography variant="h5" mb={2}>Top Search Products</Typography>
+        <Typography variant="h5" sx={{ fontWeight: 'bold' }} mb={2}>Top Search Products</Typography>
         <Grid container spacing={2}>
-          {topSearchProducts.map((product) => (
-            <Grid item xs={12} sm={6} md={4} key={product.id}>
+          {data?.data.slice(0, 5).map((product: ProductData) => (
+            <Grid item xs={12} sm={6} md={4} key={product.productId}>
               <Tooltip title={product.description} arrow>
-                <Card onClick={() => handleProductClick(product.id)}>
+                <Card onClick={() => handleProductClick(product.productId)}>
                   <CardMedia
                     component="img"
-                    height="140"
-                    image={product.image}
-                    alt={product.name}
+                    height="200"  // Tăng chiều cao ảnh
+                    style={{ width: 'auto', margin: '0 auto' }} // Giảm chiều rộng và căn giữa
+                    image={product.images[0]?.imgUrl || 'https://via.placeholder.com/150'}
+                    alt={product.productName}
                   />
                   <CardContent>
-                    <Typography variant="h6">{product.name}</Typography>
+                    <Typography variant="h6">{product.productName}</Typography>
                   </CardContent>
                 </Card>
               </Tooltip>
@@ -84,20 +86,21 @@ const Tab1: React.FC = () => {
 
       {/* Today's Suggestions */}
       <Box mt={3}>
-        <Typography variant="h5" mb={2}>Today's Suggestions</Typography>
+        <Typography variant="h5" sx={{ fontWeight: 'bold' }} mb={2}>Today's Suggestions</Typography>
         <Grid container spacing={2}>
-          {todaySuggestions.map((product) => (
-            <Grid item xs={12} sm={6} md={4} key={product.id}>
+          {data?.data.slice(0, 10).map((product: ProductData) => (
+            <Grid item xs={12} sm={6} md={4} key={product.productId}>
               <Tooltip title={product.description} arrow>
-                <Card onClick={() => handleProductClick(product.id)}>
+                <Card onClick={() => handleProductClick(product.productId)}>
                   <CardMedia
                     component="img"
-                    height="140"
-                    image={product.image}
-                    alt={product.name}
+                    height="200"
+                    style={{ width: 'auto', margin: '0 auto' }}
+                    image={product.images[0]?.imgUrl || 'https://via.placeholder.com/150'}
+                    alt={product.productName}
                   />
                   <CardContent>
-                    <Typography variant="h6">{product.name}</Typography>
+                    <Typography variant="h6">{product.productName}</Typography>
                   </CardContent>
                 </Card>
               </Tooltip>
@@ -108,20 +111,21 @@ const Tab1: React.FC = () => {
 
       {/* Newest Products */}
       <Box mt={3}>
-        <Typography variant="h5" mb={2}>Newest Products</Typography>
+        <Typography variant="h5" sx={{ fontWeight: 'bold' }} mb={2}>Newest Products</Typography>
         <Grid container spacing={2}>
-          {paginatedProducts.map((product) => (
-            <Grid item xs={12} sm={6} md={4} key={product.id}>
+          {paginatedProducts.map((product: ProductData) => (
+            <Grid item xs={12} sm={6} md={4} key={product.productId}>
               <Tooltip title={product.description} arrow>
-                <Card onClick={() => handleProductClick(product.id)}>
+                <Card onClick={() => handleProductClick(product.productId)}>
                   <CardMedia
                     component="img"
-                    height="140"
-                    image={product.image}
-                    alt={product.name}
+                    height="200"
+                    style={{ width: 'auto', margin: '0 auto' }}
+                    image={product.images[0]?.imgUrl || 'https://via.placeholder.com/150'}
+                    alt={product.productName}
                   />
                   <CardContent>
-                    <Typography variant="h6">{product.name}</Typography>
+                    <Typography variant="h6">{product.productName}</Typography>
                   </CardContent>
                 </Card>
               </Tooltip>
@@ -132,7 +136,7 @@ const Tab1: React.FC = () => {
         {/* Pagination */}
         <Box display="flex" justifyContent="center" mt={3}>
           <Pagination
-            count={Math.ceil(products.length / itemsPerPage)}
+            count={Math.ceil((data?.data.length || 0) / itemsPerPage)}
             page={currentPage}
             onChange={handlePageChange}
           />

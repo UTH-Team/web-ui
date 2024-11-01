@@ -1,7 +1,13 @@
+import { Box } from '@mui/material';
 import React from 'react';
+import Cart from './Cart';
 
 function Tab2() {
-  return <div>Content of Tab 2</div>;
+  return (
+    <Box>
+      <Cart/>
+    </Box>
+  );
 }
 
 export default Tab2;
