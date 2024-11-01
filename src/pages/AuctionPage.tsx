@@ -2,7 +2,7 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import { Box } from '@mui/material';
 import Sidebar from '../components/Sidebar';
-import AuctionList from '../components/Auction/AuctionLlist';
+import AuctionList from '../components/auction/AuctionList';
 
 function AuctionPage() {
   return (
